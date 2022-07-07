@@ -46,14 +46,13 @@ from gnomemusic.pauseonsuspend import PauseOnSuspend
 from gnomemusic.player import Player
 from gnomemusic.scrobbler import LastFmScrobbler
 from gnomemusic.search import Search
-from gnomemusic.widgets.aboutdialog import AboutDialog
 from gnomemusic.widgets.lastfmdialog import LastfmDialog
 from gnomemusic.window import Window
 
 
 class Application(Adw.Application):
 
-    def __init__(self, application_id):
+    def __init__(self, application_id, version):
         super().__init__(
             application_id=application_id,
             flags=Gio.ApplicationFlags.FLAGS_NONE)
@@ -61,6 +60,8 @@ class Application(Adw.Application):
         GLib.set_application_name(_("Music"))
         GLib.set_prgname(application_id)
         GLib.setenv("PULSE_PROP_media.role", "music", True)
+
+        self._version = version
 
         self._window = None
 
@@ -225,8 +226,127 @@ class Application(Adw.Application):
         self._lastfm_dialog.present()
 
     def _about(self, action, param):
-        about = AboutDialog()
-        about.props.transient_for = self._window
+        developers = [
+            "Abhinav Singh",
+            "Adam Blanchet",
+            "Adrian Solom",
+            "Alberto Fanjul",
+            "Alexander Mikhaylenko",
+            "Andre Klapper",
+            "Andreas Nilsson",
+            "Apostol Bakalov",
+            "Arnel A. Borja",
+            "Ashwani Singh Tanwar",
+            "Ashwin Mohan",
+            "Atharva Veer",
+            "Benoît Legat",
+            "Bilal Elmoussaoui",
+            "Billy Barrow",
+            "Bruce Cowan",
+            "Carlos Garnacho",
+            "Carlos Soriano",
+            "Chinmay Gurjar",
+            "Christophe van den Abbeele",
+            "Christopher Davis",
+            "Clayton G. Hobbs",
+            "Divyanshu Vishwakarma",
+            "Eslam Mostafa",
+            "Elias Entrup",
+            "Erik Inkinen",
+            "Evan Nehring",
+            "Evandro Giovanini",
+            "Fabiano Fidêncio",
+            "Felipe Borges",
+            "Florian Darfeuille",
+            "Gaurav Narula",
+            "Georges Basile Stavracas Neto",
+            "Guillaume Quintard",
+            "Gyanesh Malhotra",
+            "Harry Xie",
+            "Hugo Posnic",
+            "Ishaan Shah",
+            "Islam Bahnasy",
+            "Jakub Steiner",
+            "James A. Baker",
+            "Jan Alexander Steffens",
+            "Janne Körkkö",
+            "Jan-Michael Brummer",
+            "Jean Felder",
+            "Jeremy Bicha",
+            "Jesus Bermudez Velazquez",
+            "Jordan Petridis",
+            "Juan José González",
+            "Juan Suarez",
+            "Kainaat Singh",
+            "Kalev Lember",
+            "Kevin Haller",
+            "Konstantin Pospelov",
+            "Koushik Sahu",
+            "Lucy Coleclough",
+            "Marinus Schraal",
+            "Michael Catanzaro",
+            "Mohanna Datta Yelugoti",
+            "Nick Richards",
+            "Niels De Graef",
+            "Nikolay Yanchuk",
+            "Nils Reuße",
+            "Pablo Palácios",
+            "Phil Dawson",
+            "Piotr Drąg",
+            "Prashant Tyagi",
+            "Rafael Coelho",
+            "Rashi Sah",
+            "Rasmus Thomsen",
+            "Reuben Dsouza",
+            "Robert Greener",
+            "Sabri Ünal",
+            "Sagar Lakhani",
+            "Sai Suman Prayaga",
+            "Sam Hewitt",
+            "Sam Thursfield",
+            "Sambhav Kothari",
+            "Seif Lotfy",
+            "Shivani Poddar",
+            "Shivansh Handa",
+            "Simon McVittie",
+            "Sophie Herold",
+            "Subhadip Jana",
+            "Sumaid Syed",
+            "Suyash Garg",
+            "Tapasweni Pathak",
+            "Taylor Garcia",
+            "Tjipke van der Heide",
+            "Vadim Rutkovsky",
+            "Veerasamy Sevagen",
+            "Vineet Reddy",
+            "Weifang Lai",
+            "Yann Delaby",
+            "Yash Singh",
+            "Yosef Or Boczko"
+        ]
+
+        designers = [
+            "Allan Day",
+            "Jakub Steiner",
+            "William Jon McCann"
+        ]
+
+        about = Adw.AboutWindow(
+            application_name=_("Music"),
+            application_icon=self.props.application_id,
+            developer_name=_("The GNOME Project"),
+            transient_for=self._window,
+            developers=developers,
+            designers=designers,
+            translator_credits=_("translator-credits"),
+            version=self._version,
+            website="https://wiki.gnome.org/Apps/Music",
+            issue_url="https://gitlab.gnome.org/GNOME/gnome-music"
+            "/-/issues/new",
+            copyright=_("Copyright © 2018 GNOME Music Developers"),
+            license_type=Gtk.License.GPL_2_0)
+
+        # about.props.transient_for = self._window
         about.present()
 
     def do_startup(self):
